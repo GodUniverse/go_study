@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 // 只出现一次的数字
 func singleNumber(nums []int) int {
@@ -40,6 +43,44 @@ func isPalindrome(x int) bool {
 	return true
 }
 
+// 有效的括号
+func isValid(s string) bool {
+	stack := []rune{}
+	pair := map[rune]rune{
+		')': '(',
+		'}': '{',
+		']': '[',
+	}
+	for _, ch := range s {
+		if ch == '(' || ch == '{' || ch == '[' {
+			stack = append(stack, ch)
+		} else {
+			if len(stack) == 0 || stack[len(stack)-1] != pair[ch] {
+				return false
+			}
+			stack = stack[:len(stack)-1]
+		}
+	}
+	return len(stack) == 0
+}
+
+// 最长公共前缀
+func longestCommonPrefix(strs []string) string {
+	if len(strs) == 0 {
+		return ""
+	}
+	prefix := strs[0]
+	for i := 1; i < len(strs); i++ {
+		for len(prefix) > 0 && !strings.HasPrefix(strs[i], prefix) {
+			prefix = prefix[:len(prefix)-1]
+		}
+		if prefix == "" {
+			return ""
+		}
+	}
+	return prefix
+}
+
 func main() {
 	//题目一
 	arr := []int{1, 1, 2, 2, 3, 4, 3}
@@ -49,4 +90,13 @@ func main() {
 	//题目二
 	palindrome := isPalindrome(12321)
 	fmt.Println(palindrome)
+
+	//题目三
+	valid := isValid("()")
+	fmt.Println(valid)
+
+	//题目四
+	strs := []string{"hello", "hero", "head"}
+	prefix := longestCommonPrefix(strs)
+	fmt.Println(prefix)
 }
